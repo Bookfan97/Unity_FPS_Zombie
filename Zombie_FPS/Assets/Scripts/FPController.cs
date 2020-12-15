@@ -15,6 +15,8 @@ public class FPController : MonoBehaviour
     private CapsuleCollider _capsuleCollider;
     private Quaternion cameraRotation;
     private Quaternion playerRotation;
+    private bool isCursorLocked = true;
+    private bool lockCursor = true;
     
     // Start is called before the first frame update
     void Start()
@@ -53,6 +55,7 @@ public class FPController : MonoBehaviour
         float x = Input.GetAxis("Horizontal") * speed;
         float z = Input.GetAxis("Vertical") * speed;
         transform.position += _camera.transform.forward * z + _camera.transform.right * x; //new Vector3(x * speed,0,z * speed);
+        UpdateCursorLock();
     }
 
     bool isGrounded()
@@ -78,5 +81,45 @@ public class FPController : MonoBehaviour
         quaternion.x = Mathf.Tan(0.5f * Mathf.Deg2Rad * angleX);
         
         return quaternion;
+    }
+
+    public void SetCursorLock(bool value)
+    {
+        lockCursor = value;
+        if (!lockCursor)
+        {
+            Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = true;
+        }
+    }
+
+    public void UpdateCursorLock()
+    {
+        if (lockCursor)
+        {
+            InternalLockUpdate();
+        }
+    }
+
+    public void InternalLockUpdate()
+    {
+        if (Input.GetKeyUp(KeyCode.Escape))
+        {
+            isCursorLocked = false;
+        }
+        else if (Input.GetMouseButtonUp(0))
+        {
+            isCursorLocked = true;
+        }
+        if (isCursorLocked)
+        {
+            Cursor.lockState = CursorLockMode.Locked;
+            Cursor.visible = false;
+        }
+        else if (!isCursorLocked)
+        {
+            Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = true;
+        }
     }
 }
