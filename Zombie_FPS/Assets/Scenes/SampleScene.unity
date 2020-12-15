@@ -136,6 +136,7 @@ GameObject:
   - component: {fileID: 560343749}
   - component: {fileID: 560343748}
   - component: {fileID: 560343752}
+  - component: {fileID: 560343753}
   m_Layer: 0
   m_Name: Capsule
   m_TagString: Untagged
@@ -233,6 +234,22 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 0.1
+--- !u!54 &560343753
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 560343747}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_UseGravity: 1
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 112
+  m_CollisionDetection: 0
 --- !u!1 &705507993
 GameObject:
   m_ObjectHideFlags: 0
