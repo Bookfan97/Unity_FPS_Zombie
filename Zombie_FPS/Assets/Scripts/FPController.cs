@@ -2,6 +2,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UIElements;
+using Cursor = UnityEngine.Cursor;
 
 public class FPController : MonoBehaviour
 {
@@ -11,6 +13,7 @@ public class FPController : MonoBehaviour
     [SerializeField] float ySensitivity = 2;
     [SerializeField] private float minX = -90;
     [SerializeField] private float maxX = 90;
+    [SerializeField] private Animator _animator = null;
     private Rigidbody _rigidbody;
     private CapsuleCollider _capsuleCollider;
     private Quaternion cameraRotation;
@@ -30,14 +33,25 @@ public class FPController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        if (Input.GetKeyDown(KeyCode.F))
+        {
+            _animator.SetBool("arm", !_animator.GetBool("arm"));
+        }
+        if (Input.GetMouseButtonDown(0))
+        {
+            _animator.SetTrigger("fire");
+        }
+        if (Input.GetKeyDown(KeyCode.R))
+        {
+            _animator.SetTrigger("reload");
+        }
     }
 
     private void FixedUpdate()
     {
         //Camera Rotation
-        float xRotation = Input.GetAxis("Mouse X") * ySensitivity;
-        float yRotation = Input.GetAxis("Mouse Y") * xSensitivity;
+        float xRotation = Input.GetAxis("Mouse Y") * xSensitivity;
+        float yRotation = Input.GetAxis("Mouse X") * ySensitivity;
 
         cameraRotation *= Quaternion.Euler(-xRotation, 0, 0);
         playerRotation *= Quaternion.Euler(0, yRotation, 0);
