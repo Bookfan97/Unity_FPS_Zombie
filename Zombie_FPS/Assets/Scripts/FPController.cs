@@ -9,6 +9,8 @@ public class FPController : MonoBehaviour
     [SerializeField] GameObject _camera = null;
     [SerializeField] float xSensitivity = 2;
     [SerializeField] float ySensitivity = 2;
+    [SerializeField] private float minX = -90;
+    [SerializeField] private float maxX = 90;
     private Rigidbody _rigidbody;
     private CapsuleCollider _capsuleCollider;
     private Quaternion cameraRotation;
@@ -37,7 +39,7 @@ public class FPController : MonoBehaviour
 
         cameraRotation *= Quaternion.Euler(-xRotation, 0, 0);
         playerRotation *= Quaternion.Euler(0, yRotation, 0);
-
+        cameraRotation = ClampRotationAroundXAxis(cameraRotation);
         this.transform.localRotation = playerRotation;
         _camera.transform.localRotation = cameraRotation;
         
@@ -48,9 +50,9 @@ public class FPController : MonoBehaviour
         }
 
         //Moving
-        float x = Input.GetAxis("Horizontal");
-        float z = Input.GetAxis("Vertical");
-        transform.position += new Vector3(x * speed,0,z * speed);
+        float x = Input.GetAxis("Horizontal") * speed;
+        float z = Input.GetAxis("Vertical") * speed;
+        transform.position += _camera.transform.forward * z + _camera.transform.right * x; //new Vector3(x * speed,0,z * speed);
     }
 
     bool isGrounded()
@@ -62,5 +64,19 @@ public class FPController : MonoBehaviour
             return true;
         }
         return false;
+    }
+
+    Quaternion ClampRotationAroundXAxis(Quaternion quaternion)
+    {
+        quaternion.x /= quaternion.w;
+        quaternion.y /= quaternion.w;
+        quaternion.z /= quaternion.w;
+        quaternion.w = 1.0f;
+
+        float angleX = 2.0f * Mathf.Rad2Deg * Mathf.Atan(quaternion.x);
+        angleX = Mathf.Clamp(angleX, minX, maxX);
+        quaternion.x = Mathf.Tan(0.5f * Mathf.Deg2Rad * angleX);
+        
+        return quaternion;
     }
 }
