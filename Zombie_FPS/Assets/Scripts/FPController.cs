@@ -18,6 +18,8 @@ public class FPController : MonoBehaviour
     private CapsuleCollider _capsuleCollider;
     private Quaternion cameraRotation;
     private Quaternion playerRotation;
+    public float x;
+    public float z;
     private bool isCursorLocked = true;
     private bool lockCursor = true;
     
@@ -45,6 +47,18 @@ public class FPController : MonoBehaviour
         {
             _animator.SetTrigger("reload");
         }
+
+        if (Mathf.Abs(x) > 0 || Mathf.Abs(z) > 0)
+        {
+            if (!_animator.GetBool("walking"))
+            {
+                _animator.SetBool("walking", true);
+            }
+        }
+        else if(_animator.GetBool("walking"))
+        {
+            _animator.SetBool("walking", false);
+        }
     }
 
     private void FixedUpdate()
@@ -66,8 +80,8 @@ public class FPController : MonoBehaviour
         }
 
         //Moving
-        float x = Input.GetAxis("Horizontal") * speed;
-        float z = Input.GetAxis("Vertical") * speed;
+        x = Input.GetAxis("Horizontal") * speed;
+        z = Input.GetAxis("Vertical") * speed;
         transform.position += _camera.transform.forward * z + _camera.transform.right * x; //new Vector3(x * speed,0,z * speed);
         UpdateCursorLock();
     }
