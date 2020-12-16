@@ -18,8 +18,8 @@ public class FPController : MonoBehaviour
     private CapsuleCollider _capsuleCollider;
     private Quaternion cameraRotation;
     private Quaternion playerRotation;
-    public float x;
-    public float z;
+    private float x;
+    private float z;
     private bool isCursorLocked = true;
     private bool lockCursor = true;
     
