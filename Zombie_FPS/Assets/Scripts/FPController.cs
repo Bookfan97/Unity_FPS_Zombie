@@ -14,6 +14,8 @@ public class FPController : MonoBehaviour
     [SerializeField] float ySensitivity = 2;
     [SerializeField] private float minX = -90;
     [SerializeField] private float maxX = 90;
+    [SerializeField] int ammoToAdd = 10;
+    [SerializeField] int healthToAdd = 10;
     [SerializeField] private Animator _animator = null;
     [SerializeField] private AudioClip jump = null;
     [SerializeField] private AudioClip land = null;
@@ -29,10 +31,15 @@ public class FPController : MonoBehaviour
     private bool isCursorLocked = true;
     private bool lockCursor = true;
     private AudioSource playerAudioSource;
-    
+    //Inventory
+    private int ammo = 0;
+    private int health = 0;
+    private int ammoMax = 50;
+    private int healthMax = 100;
     // Start is called before the first frame update
     void Start()
     {
+        //health = healthMax;
         _rigidbody = this.GetComponent<Rigidbody>();
         _capsuleCollider = this.GetComponent<CapsuleCollider>();
         cameraRotation = _camera.transform.localRotation;
@@ -128,16 +135,18 @@ public class FPController : MonoBehaviour
 
     private void OnCollisionEnter(Collision other)
     {
-        if (other.gameObject.tag == "Ammo")
+        if (other.gameObject.tag == "Ammo" && ammo < ammoMax)
         {
-            Debug.Log("Ammo");
             playFPCSound(ammoPickupSound);
+            ammo = Mathf.Clamp(ammo + ammoToAdd, 0, ammoMax);
+            Debug.Log("Ammo: "+ ammo);
             Destroy(other.gameObject);
         }
-        else if (other.gameObject.tag == "Health")
+        else if (other.gameObject.tag == "Health" && health < healthMax)
         {
-            Debug.Log("Health");
             playFPCSound(healthPickupSound);
+            health = Mathf.Clamp(health + healthToAdd, 0, healthMax);
+            Debug.Log("Health: " + health);
             Destroy(other.gameObject);
         }
         else if (isGrounded())
