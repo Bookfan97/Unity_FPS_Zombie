@@ -17,6 +17,8 @@ public class FPController : MonoBehaviour
     [SerializeField] private Animator _animator = null;
     [SerializeField] private AudioClip jump = null;
     [SerializeField] private AudioClip land = null;
+    [SerializeField] private AudioClip ammoPickupSound = null;
+    [SerializeField] private AudioClip healthPickupSound = null;
     [SerializeField] private AudioClip[] footsteps = null;
     private Rigidbody _rigidbody;
     private CapsuleCollider _capsuleCollider;
@@ -71,8 +73,7 @@ public class FPController : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Space) && isGrounded())
         {
             _rigidbody.AddForce(0, 300, 0);
-            playerAudioSource.clip = jump;
-            playerAudioSource.Play();
+            playFPCSound(jump);
             if (_animator.GetBool("walking"))
             {
                 CancelInvoke("PlayFootstepAudio");
@@ -80,11 +81,17 @@ public class FPController : MonoBehaviour
         }
     }
 
+    public void playFPCSound(AudioClip sound)
+    {
+        playerAudioSource.Stop();
+        playerAudioSource.clip = sound;
+        playerAudioSource.Play();
+    }
+
     void PlayFootstepAudio()
     {
         int n = Random.Range(1, footsteps.Length);
-        playerAudioSource.clip = footsteps[n];
-        playerAudioSource.Play();
+        playFPCSound(footsteps[n]);
         footsteps[n] = footsteps[0];
         footsteps[0] =  playerAudioSource.clip;
     }
@@ -121,10 +128,21 @@ public class FPController : MonoBehaviour
 
     private void OnCollisionEnter(Collision other)
     {
-        if (isGrounded())
+        if (other.gameObject.tag == "Ammo")
         {
-            playerAudioSource.clip = land;
-            playerAudioSource.Play();
+            Debug.Log("Ammo");
+            playFPCSound(ammoPickupSound);
+            Destroy(other.gameObject);
+        }
+        else if (other.gameObject.tag == "Health")
+        {
+            Debug.Log("Health");
+            playFPCSound(healthPickupSound);
+            Destroy(other.gameObject);
+        }
+        else if (isGrounded())
+        {
+           playFPCSound(land);
             if (_animator.GetBool("walking"))
             {
                 InvokeRepeating("PlayFootstepAudio", 0, 0.4f);
