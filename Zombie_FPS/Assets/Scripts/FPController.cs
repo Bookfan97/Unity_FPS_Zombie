@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UIElements;
 using Cursor = UnityEngine.Cursor;
+using Random = UnityEngine.Random;
 
 public class FPController : MonoBehaviour
 {
@@ -14,6 +15,9 @@ public class FPController : MonoBehaviour
     [SerializeField] private float minX = -90;
     [SerializeField] private float maxX = 90;
     [SerializeField] private Animator _animator = null;
+    [SerializeField] private AudioClip jump = null;
+    [SerializeField] private AudioClip land = null;
+    [SerializeField] private AudioClip[] footsteps = null;
     private Rigidbody _rigidbody;
     private CapsuleCollider _capsuleCollider;
     private Quaternion cameraRotation;
@@ -22,6 +26,7 @@ public class FPController : MonoBehaviour
     private float z;
     private bool isCursorLocked = true;
     private bool lockCursor = true;
+    private AudioSource playerAudioSource;
     
     // Start is called before the first frame update
     void Start()
@@ -30,6 +35,7 @@ public class FPController : MonoBehaviour
         _capsuleCollider = this.GetComponent<CapsuleCollider>();
         cameraRotation = _camera.transform.localRotation;
         playerRotation = this.transform.localRotation;
+        playerAudioSource = this.GetComponent<AudioSource>();
     }
 
     // Update is called once per frame
@@ -53,14 +59,36 @@ public class FPController : MonoBehaviour
             if (!_animator.GetBool("walking"))
             {
                 _animator.SetBool("walking", true);
+                InvokeRepeating("PlayFootstepAudio", 0, 0.4f);
             }
         }
         else if(_animator.GetBool("walking"))
         {
             _animator.SetBool("walking", false);
+            CancelInvoke("PlayFootstepAudio");
+        }
+        //Jumping
+        if (Input.GetKeyDown(KeyCode.Space) && isGrounded())
+        {
+            _rigidbody.AddForce(0, 300, 0);
+            playerAudioSource.clip = jump;
+            playerAudioSource.Play();
+            if (_animator.GetBool("walking"))
+            {
+                CancelInvoke("PlayFootstepAudio");
+            }
         }
     }
 
+    void PlayFootstepAudio()
+    {
+        int n = Random.Range(1, footsteps.Length);
+        playerAudioSource.clip = footsteps[n];
+        playerAudioSource.Play();
+        footsteps[n] = footsteps[0];
+        footsteps[0] =  playerAudioSource.clip;
+    }
+    
     private void FixedUpdate()
     {
         //Camera Rotation
@@ -72,12 +100,6 @@ public class FPController : MonoBehaviour
         cameraRotation = ClampRotationAroundXAxis(cameraRotation);
         this.transform.localRotation = playerRotation;
         _camera.transform.localRotation = cameraRotation;
-        
-        //Jumping
-        if (Input.GetKeyDown(KeyCode.Space) && isGrounded())
-        {
-            _rigidbody.AddForce(0, 300, 0);
-        }
 
         //Moving
         x = Input.GetAxis("Horizontal") * speed;
@@ -95,6 +117,19 @@ public class FPController : MonoBehaviour
             return true;
         }
         return false;
+    }
+
+    private void OnCollisionEnter(Collision other)
+    {
+        if (isGrounded())
+        {
+            playerAudioSource.clip = land;
+            playerAudioSource.Play();
+            if (_animator.GetBool("walking"))
+            {
+                InvokeRepeating("PlayFootstepAudio", 0, 0.4f);
+            }
+        }
     }
 
     Quaternion ClampRotationAroundXAxis(Quaternion quaternion)
