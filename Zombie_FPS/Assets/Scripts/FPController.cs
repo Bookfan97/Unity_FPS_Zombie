@@ -34,6 +34,8 @@ public class FPController : MonoBehaviour
     private float z;
     private bool isCursorLocked = true;
     private bool lockCursor = true;
+    private bool playingWalking = false;
+    private bool previouslyGrounded = true;
     private AudioSource playerAudioSource;
     //Inventory
     private int ammo = 0;
@@ -91,23 +93,32 @@ public class FPController : MonoBehaviour
             {
                 _animator.SetBool("walking", true);
                 InvokeRepeating("PlayFootstepAudio", 0, 0.4f);
+                playingWalking = true;
             }
         }
         else if(_animator.GetBool("walking"))
         {
             _animator.SetBool("walking", false);
             CancelInvoke("PlayFootstepAudio");
+            playingWalking = false;
         }
         //Jumping
-        if (Input.GetKeyDown(KeyCode.Space) && isGrounded())
+        bool grounded = isGrounded();
+        if (Input.GetKeyDown(KeyCode.Space) && grounded)
         {
             _rigidbody.AddForce(0, 300, 0);
             playFPCSound(jump);
             if (_animator.GetBool("walking"))
             {
                 CancelInvoke("PlayFootstepAudio");
+                playingWalking = false;
             }
         }
+        else if(!previouslyGrounded & grounded)
+        {
+            playFPCSound(land);
+        }
+        previouslyGrounded = grounded;
     }
 
     public void playFPCSound(AudioClip sound)
@@ -123,6 +134,7 @@ public class FPController : MonoBehaviour
         playFPCSound(footsteps[n]);
         footsteps[n] = footsteps[0];
         footsteps[0] =  playerAudioSource.clip;
+        playingWalking = true;
     }
     
     private void FixedUpdate()
@@ -179,8 +191,7 @@ public class FPController : MonoBehaviour
         }
         else if (isGrounded())
         {
-           playFPCSound(land);
-            if (_animator.GetBool("walking"))
+            if (_animator.GetBool("walking") && !playingWalking)
             {
                 InvokeRepeating("PlayFootstepAudio", 0, 0.4f);
             }
