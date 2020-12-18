@@ -16,9 +16,12 @@ public class FPController : MonoBehaviour
     [SerializeField] private float maxX = 90;
     [SerializeField] int ammoToAdd = 10;
     [SerializeField] int healthToAdd = 10;
+    [SerializeField] int damageAmount = 10;
     [SerializeField] private Animator _animator = null;
     [SerializeField] private AudioClip jump = null;
     [SerializeField] private AudioClip land = null;
+    [SerializeField] private AudioClip ammoEmpty = null;
+    [SerializeField] private AudioClip death = null;
     [SerializeField] private AudioClip ammoPickupSound = null;
     [SerializeField] private AudioClip healthPickupSound = null;
     [SerializeField] private AudioClip[] footsteps = null;
@@ -39,7 +42,7 @@ public class FPController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        //health = healthMax;
+        health = healthMax;
         _rigidbody = this.GetComponent<Rigidbody>();
         _capsuleCollider = this.GetComponent<CapsuleCollider>();
         cameraRotation = _camera.transform.localRotation;
@@ -54,9 +57,18 @@ public class FPController : MonoBehaviour
         {
             _animator.SetBool("arm", !_animator.GetBool("arm"));
         }
-        if (Input.GetMouseButtonDown(0))
+        if (Input.GetMouseButtonDown(0) && !_animator.GetBool("fire"))
         {
-            _animator.SetTrigger("fire");
+            if (ammo > 0)
+            {
+                _animator.SetTrigger("fire");
+                ammo = Mathf.Max(ammo - 1 , 0, ammo-1);
+                Debug.Log("Ammo: "+ ammo);
+            }
+            else if(_animator.GetBool("arm"))
+            {
+                playFPCSound(ammoEmpty);
+            }
         }
         if (Input.GetKeyDown(KeyCode.R))
         {
@@ -148,6 +160,12 @@ public class FPController : MonoBehaviour
             health = Mathf.Clamp(health + healthToAdd, 0, healthMax);
             Debug.Log("Health: " + health);
             Destroy(other.gameObject);
+        }
+        else if (other.gameObject.tag == "Lava")
+        {
+            health = Mathf.Clamp(health - damageAmount, 0, healthMax);
+            Debug.Log("Health: " + health);
+            playFPCSound(death);
         }
         else if (isGrounded())
         {
