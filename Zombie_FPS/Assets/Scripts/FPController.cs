@@ -75,7 +75,7 @@ public class FPController : MonoBehaviour
                 playFPCSound(ammoEmpty);
             }
         }
-        if (Input.GetKeyDown(KeyCode.R) && _animator.GetBool("arm"))
+        if (Input.GetKeyDown(KeyCode.R) && _animator.GetBool("arm") && ammo > 0)
         {
             _animator.SetTrigger("reload");
             int amountNeed = ammoClipMax - ammoClip; 
