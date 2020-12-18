@@ -24,6 +24,7 @@ public class FPController : MonoBehaviour
     [SerializeField] private AudioClip death = null;
     [SerializeField] private AudioClip ammoPickupSound = null;
     [SerializeField] private AudioClip healthPickupSound = null;
+    [SerializeField] private AudioClip reloadSound = null;
     [SerializeField] private AudioClip[] footsteps = null;
     private Rigidbody _rigidbody;
     private CapsuleCollider _capsuleCollider;
@@ -39,6 +40,8 @@ public class FPController : MonoBehaviour
     private int health = 0;
     private int ammoMax = 50;
     private int healthMax = 100;
+    private int ammoClip = 0;
+    private int ammoClipMax = 10;
     // Start is called before the first frame update
     void Start()
     {
@@ -70,9 +73,16 @@ public class FPController : MonoBehaviour
                 playFPCSound(ammoEmpty);
             }
         }
-        if (Input.GetKeyDown(KeyCode.R))
+        if (Input.GetKeyDown(KeyCode.R) && _animator.GetBool("arm"))
         {
             _animator.SetTrigger("reload");
+            int amountNeed = ammoClipMax - ammoClip; 
+            int ammoAvailable = amountNeed < ammo ? amountNeed : ammo;
+            ammo -= ammoAvailable;
+            ammoClip += ammoAvailable;
+            Debug.Log("Ammo Left: "+ammo);
+            Debug.Log("Ammo in clip: "+ ammoClip);
+            playFPCSound(reloadSound);
         }
 
         if (Mathf.Abs(x) > 0 || Mathf.Abs(z) > 0)
