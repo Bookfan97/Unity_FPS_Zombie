@@ -128,7 +128,7 @@ MonoBehaviour:
   death: {fileID: 8300000, guid: a3a29fc6ed9b2a14a990bc72f18b52d5, type: 3}
   ammoPickupSound: {fileID: 8300000, guid: 84c76bbb9ed68f54ca3cc827dab32636, type: 3}
   healthPickupSound: {fileID: 8300000, guid: 9e3eccf8baea8a34690f02495feedb3d, type: 3}
-  reloadSound: {fileID: 0}
+  reloadSound: {fileID: 8300000, guid: 687cd914960d5e24bb60fbc1e0b46990, type: 3}
   footsteps:
   - {fileID: 8300000, guid: 41cabf8e1b2bf41979caa467071a7c7b, type: 3}
   - {fileID: 8300000, guid: 53dcb87c0d58147c6a32f226285470b7, type: 3}
