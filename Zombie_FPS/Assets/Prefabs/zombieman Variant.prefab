@@ -33,6 +33,14 @@ PrefabInstance:
       propertyPath: player
       value: 
       objectReference: {fileID: 0}
+    - target: {fileID: 1210150315, guid: 6a1d6fe89cd7e4fe486e4cabf09b8d3d, type: 3}
+      propertyPath: walkingSpeed
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1210150315, guid: 6a1d6fe89cd7e4fe486e4cabf09b8d3d, type: 3}
+      propertyPath: runningSpeed
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 5176861845160572960, guid: 6a1d6fe89cd7e4fe486e4cabf09b8d3d, type: 3}
       propertyPath: m_Name
       value: zombieman Variant
