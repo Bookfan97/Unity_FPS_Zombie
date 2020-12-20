@@ -41,6 +41,10 @@ PrefabInstance:
       propertyPath: runningSpeed
       value: 0.3
       objectReference: {fileID: 0}
+    - target: {fileID: 1306225204, guid: d5b7cf80f1fab4ea0bd49a0e878214fe, type: 3}
+      propertyPath: ragDoll
+      value: 
+      objectReference: {fileID: 3814777185502180001, guid: 3f05b95496e2f48dc86cc2edd094211d, type: 3}
     - target: {fileID: 1099347172983380646, guid: d5b7cf80f1fab4ea0bd49a0e878214fe, type: 3}
       propertyPath: m_Name
       value: boss Variant

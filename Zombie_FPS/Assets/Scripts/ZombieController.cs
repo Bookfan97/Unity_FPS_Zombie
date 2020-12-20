@@ -9,6 +9,7 @@ public class ZombieController : MonoBehaviour
     [SerializeField] private float distanceToForget = 20;
     [SerializeField] private float walkingSpeed =1;
     [SerializeField] private float runningSpeed=2;
+    [SerializeField] private GameObject ragDoll = null;
     private Animator _animator;
     private NavMeshAgent _navMeshAgent;
     private static readonly int IsWalking = Animator.StringToHash("isWalking");
@@ -37,6 +38,22 @@ public class ZombieController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (Input.GetKeyDown(KeyCode.P))
+        {
+            if (Random.Range(0, 10) < 5)
+            {
+                GameObject newRagDoll = Instantiate(ragDoll, this.transform.position, this.transform.rotation);
+                newRagDoll.transform.Find("Hips").GetComponent<Rigidbody>().AddForce(Camera.main.transform.forward * 100000);
+                Destroy(this.gameObject);
+            }
+            else
+            {
+                TurnOffTriggers();
+                _animator.SetBool(IsDead, true);
+                State = STATE.DEAD;
+            }
+            return;
+        }
         if (player == null)
         {
             player = GameObject.FindWithTag("Player");

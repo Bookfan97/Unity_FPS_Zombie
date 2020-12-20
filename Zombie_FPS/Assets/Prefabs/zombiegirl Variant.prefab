@@ -19,6 +19,10 @@ PrefabInstance:
       propertyPath: runningSpeed
       value: 2
       objectReference: {fileID: 0}
+    - target: {fileID: 407133797, guid: 7912ec467aa9147a59e49b3925ad126e, type: 3}
+      propertyPath: ragDoll
+      value: 
+      objectReference: {fileID: 1541204302593932504, guid: 29635fd7ba813430b8b90eaa03d24a65, type: 3}
     - target: {fileID: 5643912976069227624, guid: 7912ec467aa9147a59e49b3925ad126e, type: 3}
       propertyPath: m_LocalPosition.x
       value: 264.6208
