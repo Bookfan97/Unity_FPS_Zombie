@@ -10,6 +10,7 @@ public class FPController : MonoBehaviour
 {
     [SerializeField] private float speed = 0.1f;
     [SerializeField] GameObject _camera = null;
+    [SerializeField] private Transform shotDirection = null;
     [SerializeField] float xSensitivity = 2;
     [SerializeField] float ySensitivity = 2;
     [SerializeField] private float minX = -90;
@@ -67,7 +68,9 @@ public class FPController : MonoBehaviour
             if (ammo > 0)
             {
                 _animator.SetTrigger("fire");
-                ammo = Mathf.Max(ammo - 1 , 0, ammo-1);
+                //ammo = Mathf.Max(ammo - 1 , 0, ammo-1);
+                ammo--;
+                ProcessZombieHit();
                 Debug.Log("Ammo: "+ ammo);
             }
             else if(_animator.GetBool("arm"))
@@ -120,6 +123,31 @@ public class FPController : MonoBehaviour
         }
         previouslyGrounded = grounded;
     }
+
+     void ProcessZombieHit()
+     {
+         RaycastHit hit;
+         if (Physics.Raycast(shotDirection.position, shotDirection.forward, out hit, 200))
+         {
+             GameObject hitZombie = hit.collider.gameObject;
+             if (hitZombie.tag == "Zombie")
+             {
+                 if (Random.Range(0, 10) < 5)
+                 {
+                     GameObject ragdollPrefab = hitZombie.GetComponent<ZombieController>().GetRagdoll();
+                     GameObject newRagDoll = Instantiate(ragdollPrefab, hitZombie.transform.position,
+                         hitZombie.transform.rotation);
+                     newRagDoll.transform.Find("Hips").GetComponent<Rigidbody>()
+                         .AddForce(shotDirection.forward * 10000);
+                     Destroy(hitZombie);
+                 }
+                 else
+                 {
+                     hitZombie.GetComponent<ZombieController>().KillZombie();
+                 }
+             }
+         }
+     }
 
     public void playFPCSound(AudioClip sound)
     {

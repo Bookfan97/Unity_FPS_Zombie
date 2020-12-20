@@ -10,14 +10,14 @@ public class ZombieController : MonoBehaviour
     [SerializeField] private float walkingSpeed =1;
     [SerializeField] private float runningSpeed=2;
     [SerializeField] private GameObject ragDoll = null;
-    private Animator _animator;
+    public Animator _animator;
     private NavMeshAgent _navMeshAgent;
     private static readonly int IsWalking = Animator.StringToHash("isWalking");
     private static readonly int IsRunning = Animator.StringToHash("isRunning");
     private static readonly int IsAttacking = Animator.StringToHash("isAttacking");
     private static readonly int IsDead = Animator.StringToHash("isDead");
 
-    enum STATE
+  enum STATE
     {
         IDLE,
         WANDER,
@@ -38,7 +38,7 @@ public class ZombieController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.P))
+        /*if (Input.GetKeyDown(KeyCode.P))
         {
             if (Random.Range(0, 10) < 5)
             {
@@ -53,7 +53,7 @@ public class ZombieController : MonoBehaviour
                 State = STATE.DEAD;
             }
             return;
-        }
+        }*/
         if (player == null)
         {
             player = GameObject.FindWithTag("Player");
@@ -127,7 +127,7 @@ public class ZombieController : MonoBehaviour
         }
     }
 
-    void TurnOffTriggers()
+    public void TurnOffTriggers()
     {
         _animator.SetBool(IsWalking, false);
         _animator.SetBool(IsAttacking, false);
@@ -160,5 +160,17 @@ public class ZombieController : MonoBehaviour
         }
 
         return false;
+    }
+
+    public void KillZombie()
+    {
+        TurnOffTriggers();
+        _animator.SetBool(IsDead, true);
+        State = STATE.DEAD;
+    }
+
+    public GameObject GetRagdoll()
+    {
+        return ragDoll;
     }
 }
