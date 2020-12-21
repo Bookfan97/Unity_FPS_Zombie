@@ -121,8 +121,10 @@ public class ZombieController : MonoBehaviour
                 }
                 break;
             case STATE.DEAD:
-                TurnOffTriggers();
-                _animator.SetBool(IsDead, true);
+                /*TurnOffTriggers();
+                _animator.SetBool(IsDead, true);*/
+                Destroy(_navMeshAgent);
+                this.GetComponent<Sink>().StartSink();
                 break;
         }
     }
