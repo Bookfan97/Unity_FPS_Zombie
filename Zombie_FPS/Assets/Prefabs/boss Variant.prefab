@@ -14,6 +14,19 @@ CapsuleCollider:
   m_Height: 2.1
   m_Direction: 1
   m_Center: {x: 0, y: 1, z: 0}
+--- !u!114 &3339035471364772186
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2173740750542015252}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9b1ec08169c46fe47a46a1a41f7601c5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  delay: 10
 --- !u!195 &7199446171763447832
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -36,18 +49,6 @@ NavMeshAgent:
   m_BaseOffset: 0
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
---- !u!114 &3339035471364772186
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2173740750542015252}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9b1ec08169c46fe47a46a1a41f7601c5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1001 &1255105579661660594
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -55,6 +56,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1306225204, guid: d5b7cf80f1fab4ea0bd49a0e878214fe, type: 3}
+      propertyPath: splats.Array.size
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: 1306225204, guid: d5b7cf80f1fab4ea0bd49a0e878214fe, type: 3}
       propertyPath: player
       value: 
@@ -71,6 +76,18 @@ PrefabInstance:
       propertyPath: ragDoll
       value: 
       objectReference: {fileID: 3814777185502180001, guid: 3f05b95496e2f48dc86cc2edd094211d, type: 3}
+    - target: {fileID: 1306225204, guid: d5b7cf80f1fab4ea0bd49a0e878214fe, type: 3}
+      propertyPath: splats.Array.data[0]
+      value: 
+      objectReference: {fileID: 8300000, guid: f863741e200be46dbbf7bec363942eaf, type: 3}
+    - target: {fileID: 1306225204, guid: d5b7cf80f1fab4ea0bd49a0e878214fe, type: 3}
+      propertyPath: splats.Array.data[1]
+      value: 
+      objectReference: {fileID: 8300000, guid: 462c16aa99ab54032a326d86d6bf9fce, type: 3}
+    - target: {fileID: 1306225204, guid: d5b7cf80f1fab4ea0bd49a0e878214fe, type: 3}
+      propertyPath: splats.Array.data[2]
+      value: 
+      objectReference: {fileID: 8300000, guid: 83e1e304a48de4f03bd076af602e1d20, type: 3}
     - target: {fileID: 1099347172983380646, guid: d5b7cf80f1fab4ea0bd49a0e878214fe, type: 3}
       propertyPath: m_Name
       value: boss Variant

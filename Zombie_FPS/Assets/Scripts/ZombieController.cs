@@ -10,13 +10,15 @@ public class ZombieController : MonoBehaviour
     [SerializeField] private float walkingSpeed =1;
     [SerializeField] private float runningSpeed=2;
     [SerializeField] private GameObject ragDoll = null;
+    [SerializeField] private float damageAmount = 5;
+    [SerializeField] private AudioClip[] splats = null;
     public Animator _animator;
     private NavMeshAgent _navMeshAgent;
     private static readonly int IsWalking = Animator.StringToHash("isWalking");
     private static readonly int IsRunning = Animator.StringToHash("isRunning");
     private static readonly int IsAttacking = Animator.StringToHash("isAttacking");
     private static readonly int IsDead = Animator.StringToHash("isDead");
-
+    private AudioSource playerAudioSource;
   enum STATE
     {
         IDLE,
@@ -33,6 +35,7 @@ public class ZombieController : MonoBehaviour
     {
         _animator = this.GetComponent<Animator>();
         _navMeshAgent = this.GetComponent<NavMeshAgent>();
+        playerAudioSource = this.GetComponent<AudioSource>();
     }
 
     // Update is called once per frame
@@ -164,6 +167,23 @@ public class ZombieController : MonoBehaviour
         return false;
     }
 
+    public void DamagePlayer()
+    {
+        player.GetComponent<FPController>().TakeHit(damageAmount);
+        int n = Random.Range(1, splats.Length);
+        playZombieSound(splats[n]);
+        splats[n] = splats[0];
+        splats[0] = playerAudioSource.clip;
+    }
+    
+    public void playZombieSound(AudioClip sound)
+    {
+        playerAudioSource.Stop();
+        playerAudioSource.clip = sound;
+        playerAudioSource.Play();
+    }
+
+    
     public void KillZombie()
     {
         TurnOffTriggers();

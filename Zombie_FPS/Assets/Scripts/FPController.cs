@@ -37,14 +37,18 @@ public class FPController : MonoBehaviour
     private bool lockCursor = true;
     private bool playingWalking = false;
     private bool previouslyGrounded = true;
+
     private AudioSource playerAudioSource;
+
     //Inventory
     private int ammo = 0;
     private int health = 0;
     private int ammoMax = 50;
     private int healthMax = 100;
     private int ammoClip = 0;
+
     private int ammoClipMax = 10;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -63,6 +67,7 @@ public class FPController : MonoBehaviour
         {
             _animator.SetBool("arm", !_animator.GetBool("arm"));
         }
+
         if (Input.GetMouseButtonDown(0) && !_animator.GetBool("fire"))
         {
             if (ammo > 0)
@@ -71,22 +76,23 @@ public class FPController : MonoBehaviour
                 //ammo = Mathf.Max(ammo - 1 , 0, ammo-1);
                 ammo--;
                 ProcessZombieHit();
-                Debug.Log("Ammo: "+ ammo);
+                Debug.Log("Ammo: " + ammo);
             }
-            else if(_animator.GetBool("arm"))
+            else if (_animator.GetBool("arm"))
             {
                 playFPCSound(ammoEmpty);
             }
         }
+
         if (Input.GetKeyDown(KeyCode.R) && _animator.GetBool("arm") && ammo > 0)
         {
             _animator.SetTrigger("reload");
-            int amountNeed = ammoClipMax - ammoClip; 
+            int amountNeed = ammoClipMax - ammoClip;
             int ammoAvailable = amountNeed < ammo ? amountNeed : ammo;
             ammo -= ammoAvailable;
             ammoClip += ammoAvailable;
-            Debug.Log("Ammo Left: "+ammo);
-            Debug.Log("Ammo in clip: "+ ammoClip);
+            Debug.Log("Ammo Left: " + ammo);
+            Debug.Log("Ammo in clip: " + ammoClip);
             playFPCSound(reloadSound);
         }
 
@@ -99,12 +105,13 @@ public class FPController : MonoBehaviour
                 playingWalking = true;
             }
         }
-        else if(_animator.GetBool("walking"))
+        else if (_animator.GetBool("walking"))
         {
             _animator.SetBool("walking", false);
             CancelInvoke("PlayFootstepAudio");
             playingWalking = false;
         }
+
         //Jumping
         bool grounded = isGrounded();
         if (Input.GetKeyDown(KeyCode.Space) && grounded)
@@ -117,37 +124,38 @@ public class FPController : MonoBehaviour
                 playingWalking = false;
             }
         }
-        else if(!previouslyGrounded & grounded)
+        else if (!previouslyGrounded & grounded)
         {
             playFPCSound(land);
         }
+
         previouslyGrounded = grounded;
     }
 
-     void ProcessZombieHit()
-     {
-         RaycastHit hit;
-         if (Physics.Raycast(shotDirection.position, shotDirection.forward, out hit, 200))
-         {
-             GameObject hitZombie = hit.collider.gameObject;
-             if (hitZombie.tag == "Zombie")
-             {
-                 if (Random.Range(0, 10) < 5)
-                 {
-                     GameObject ragdollPrefab = hitZombie.GetComponent<ZombieController>().GetRagdoll();
-                     GameObject newRagDoll = Instantiate(ragdollPrefab, hitZombie.transform.position,
-                         hitZombie.transform.rotation);
-                     newRagDoll.transform.Find("Hips").GetComponent<Rigidbody>()
-                         .AddForce(shotDirection.forward * 10000);
-                     Destroy(hitZombie);
-                 }
-                 else
-                 {
-                     hitZombie.GetComponent<ZombieController>().KillZombie();
-                 }
-             }
-         }
-     }
+    void ProcessZombieHit()
+    {
+        RaycastHit hit;
+        if (Physics.Raycast(shotDirection.position, shotDirection.forward, out hit, 200))
+        {
+            GameObject hitZombie = hit.collider.gameObject;
+            if (hitZombie.tag == "Zombie")
+            {
+                if (Random.Range(0, 10) < 5)
+                {
+                    GameObject ragdollPrefab = hitZombie.GetComponent<ZombieController>().GetRagdoll();
+                    GameObject newRagDoll = Instantiate(ragdollPrefab, hitZombie.transform.position,
+                        hitZombie.transform.rotation);
+                    newRagDoll.transform.Find("Hips").GetComponent<Rigidbody>()
+                        .AddForce(shotDirection.forward * 10000);
+                    Destroy(hitZombie);
+                }
+                else
+                {
+                    hitZombie.GetComponent<ZombieController>().KillZombie();
+                }
+            }
+        }
+    }
 
     public void playFPCSound(AudioClip sound)
     {
@@ -161,10 +169,10 @@ public class FPController : MonoBehaviour
         int n = Random.Range(1, footsteps.Length);
         playFPCSound(footsteps[n]);
         footsteps[n] = footsteps[0];
-        footsteps[0] =  playerAudioSource.clip;
+        footsteps[0] = playerAudioSource.clip;
         playingWalking = true;
     }
-    
+
     private void FixedUpdate()
     {
         //Camera Rotation
@@ -180,18 +188,20 @@ public class FPController : MonoBehaviour
         //Moving
         x = Input.GetAxis("Horizontal") * speed;
         z = Input.GetAxis("Vertical") * speed;
-        transform.position += _camera.transform.forward * z + _camera.transform.right * x; //new Vector3(x * speed,0,z * speed);
+        transform.position +=
+            _camera.transform.forward * z + _camera.transform.right * x; //new Vector3(x * speed,0,z * speed);
         UpdateCursorLock();
     }
 
     bool isGrounded()
     {
         RaycastHit hit;
-        if (Physics.SphereCast(transform.position, _capsuleCollider.radius, 
-            Vector3.down, out hit, _capsuleCollider.height/2 - _capsuleCollider.radius + 0.1f))
+        if (Physics.SphereCast(transform.position, _capsuleCollider.radius,
+            Vector3.down, out hit, _capsuleCollider.height / 2 - _capsuleCollider.radius + 0.1f))
         {
             return true;
         }
+
         return false;
     }
 
@@ -201,7 +211,7 @@ public class FPController : MonoBehaviour
         {
             playFPCSound(ammoPickupSound);
             ammo = Mathf.Clamp(ammo + ammoToAdd, 0, ammoMax);
-            Debug.Log("Ammo: "+ ammo);
+            Debug.Log("Ammo: " + ammo);
             Destroy(other.gameObject);
         }
         else if (other.gameObject.tag == "Health" && health < healthMax)
@@ -236,7 +246,7 @@ public class FPController : MonoBehaviour
         float angleX = 2.0f * Mathf.Rad2Deg * Mathf.Atan(quaternion.x);
         angleX = Mathf.Clamp(angleX, minX, maxX);
         quaternion.x = Mathf.Tan(0.5f * Mathf.Deg2Rad * angleX);
-        
+
         return quaternion;
     }
 
@@ -268,6 +278,7 @@ public class FPController : MonoBehaviour
         {
             isCursorLocked = true;
         }
+
         if (isCursorLocked)
         {
             Cursor.lockState = CursorLockMode.Locked;
@@ -278,5 +289,11 @@ public class FPController : MonoBehaviour
             Cursor.lockState = CursorLockMode.None;
             Cursor.visible = true;
         }
+    }
+    
+    public void TakeHit(float amount)
+    {
+        health = (int) Mathf.Clamp(health - amount, 0, healthMax);
+        Debug.Log("Health: "+health+"/100");
     }
 }

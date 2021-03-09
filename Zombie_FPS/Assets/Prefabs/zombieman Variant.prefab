@@ -48,6 +48,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9b1ec08169c46fe47a46a1a41f7601c5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  delay: 10
 --- !u!1001 &5646900567605879902
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -55,6 +56,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1210150315, guid: 6a1d6fe89cd7e4fe486e4cabf09b8d3d, type: 3}
+      propertyPath: splats.Array.size
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: 1210150315, guid: 6a1d6fe89cd7e4fe486e4cabf09b8d3d, type: 3}
       propertyPath: player
       value: 
@@ -67,6 +72,18 @@ PrefabInstance:
       propertyPath: runningSpeed
       value: 2
       objectReference: {fileID: 0}
+    - target: {fileID: 1210150315, guid: 6a1d6fe89cd7e4fe486e4cabf09b8d3d, type: 3}
+      propertyPath: splats.Array.data[0]
+      value: 
+      objectReference: {fileID: 8300000, guid: f863741e200be46dbbf7bec363942eaf, type: 3}
+    - target: {fileID: 1210150315, guid: 6a1d6fe89cd7e4fe486e4cabf09b8d3d, type: 3}
+      propertyPath: splats.Array.data[1]
+      value: 
+      objectReference: {fileID: 8300000, guid: 462c16aa99ab54032a326d86d6bf9fce, type: 3}
+    - target: {fileID: 1210150315, guid: 6a1d6fe89cd7e4fe486e4cabf09b8d3d, type: 3}
+      propertyPath: splats.Array.data[2]
+      value: 
+      objectReference: {fileID: 8300000, guid: 83e1e304a48de4f03bd076af602e1d20, type: 3}
     - target: {fileID: 5176861845160572960, guid: 6a1d6fe89cd7e4fe486e4cabf09b8d3d, type: 3}
       propertyPath: m_Name
       value: zombieman Variant
