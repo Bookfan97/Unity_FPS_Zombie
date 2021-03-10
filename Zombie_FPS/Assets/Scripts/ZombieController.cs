@@ -57,7 +57,7 @@ public class ZombieController : MonoBehaviour
             }
             return;
         }*/
-        if (player == null)
+        if (player == null && GameManager.gameOver == false)
         {
             player = GameObject.FindWithTag("Player");
             return;
@@ -99,6 +99,12 @@ public class ZombieController : MonoBehaviour
                 }
                 break;
             case STATE.CHASE:
+                if (GameManager.gameOver)
+                {
+                    TurnOffTriggers();
+                    State = STATE.WANDER;
+                    return;
+                }
                 _navMeshAgent.SetDestination(player.transform.position);
                 _navMeshAgent.stoppingDistance = 2;
                 TurnOffTriggers();
@@ -115,6 +121,12 @@ public class ZombieController : MonoBehaviour
                 }
                 break;
             case STATE.ATTACK:
+                if (GameManager.gameOver)
+                {
+                    TurnOffTriggers();
+                    State = STATE.WANDER;
+                    return;
+                }
                 TurnOffTriggers();
                 _animator.SetBool(IsAttacking, true);
                 this.transform.LookAt(player.transform.position);
@@ -154,7 +166,14 @@ public class ZombieController : MonoBehaviour
 
     private float DistanceToPlayer()
     {
-        return Vector3.Distance(player.transform.position, this.transform.position);
+        if (GameManager.gameOver)
+        {
+            return Mathf.Infinity;
+        }
+        else
+        {
+            return Vector3.Distance(player.transform.position, this.transform.position);
+        }
     }
 
     bool ForgetPlayer()
@@ -169,13 +188,16 @@ public class ZombieController : MonoBehaviour
 
     public void DamagePlayer()
     {
-        player.GetComponent<FPController>().TakeHit(damageAmount);
-        int n = Random.Range(1, splats.Length);
-        playZombieSound(splats[n]);
-        splats[n] = splats[0];
-        splats[0] = playerAudioSource.clip;
+        if (player != null)
+        {
+            player.GetComponent<FPController>().TakeHit(damageAmount);
+            int n = Random.Range(1, splats.Length);
+            playZombieSound(splats[n]);
+            splats[n] = splats[0];
+            splats[0] = playerAudioSource.clip;
+        }
     }
-    
+
     public void playZombieSound(AudioClip sound)
     {
         playerAudioSource.Stop();

@@ -27,6 +27,7 @@ public class FPController : MonoBehaviour
     [SerializeField] private AudioClip healthPickupSound = null;
     [SerializeField] private AudioClip reloadSound = null;
     [SerializeField] private AudioClip[] footsteps = null;
+    [SerializeField] private GameObject fullBodyPrefab = null;
     private Rigidbody _rigidbody;
     private CapsuleCollider _capsuleCollider;
     private Quaternion cameraRotation;
@@ -294,6 +295,14 @@ public class FPController : MonoBehaviour
     public void TakeHit(float amount)
     {
         health = (int) Mathf.Clamp(health - amount, 0, healthMax);
-        Debug.Log("Health: "+health+"/100");
+        if (health<=0)
+        {
+            Vector3 position = new Vector3(this.transform.position.x, Terrain.activeTerrain.SampleHeight(this.transform.position), this.transform.position.z);
+            GameObject fullBody = Instantiate(fullBodyPrefab, position, this.transform.rotation);
+            fullBody.GetComponent<Animator>().SetTrigger("Death");
+            GameManager.gameOver = true;
+            Debug.Log("YOU'RE ONE OF THEM NOW");
+            Destroy(this.gameObject);
+        }
     }
 }

@@ -5872,6 +5872,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: FPC
       objectReference: {fileID: 0}
+    - target: {fileID: 5516974430013609532, guid: 42ec7469ed2fbfe4cb42f6bc8f420df2, type: 3}
+      propertyPath: fullBodyPrefab
+      value: 
+      objectReference: {fileID: 67194648466962591, guid: 18780059112e1493685069e3f9a283f1, type: 3}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 42ec7469ed2fbfe4cb42f6bc8f420df2, type: 3}
 --- !u!1001 &1231277425
@@ -6374,7 +6378,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4598566193196887661, guid: a8e6118413a62f947824c4b21d8ae4c5, type: 3}
       propertyPath: m_RootOrder
-      value: 8
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 4598566193196887661, guid: a8e6118413a62f947824c4b21d8ae4c5, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -7243,7 +7247,7 @@ Transform:
   - {fileID: 401842354}
   - {fileID: 1117820411}
   m_Father: {fileID: 0}
-  m_RootOrder: 7
+  m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &1730713064 stripped
 Transform:
