@@ -297,12 +297,26 @@ public class FPController : MonoBehaviour
         health = (int) Mathf.Clamp(health - amount, 0, healthMax);
         if (health<=0)
         {
-            Vector3 position = new Vector3(this.transform.position.x, Terrain.activeTerrain.SampleHeight(this.transform.position), this.transform.position.z);
-            GameObject fullBody = Instantiate(fullBodyPrefab, position, this.transform.rotation);
-            fullBody.GetComponent<Animator>().SetTrigger("Death");
-            GameManager.gameOver = true;
-            Debug.Log("YOU'RE ONE OF THEM NOW");
-            Destroy(this.gameObject);
+            PlayerGameOver("Death");
         }
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.tag == "Safe")
+        {
+            PlayerGameOver("Dance");
+        }
+    }
+    
+    private void PlayerGameOver(string triggerName)
+    {
+        Vector3 position = new Vector3(this.transform.position.x,
+            Terrain.activeTerrain.SampleHeight(this.transform.position), 
+            this.transform.position.z);
+        GameObject fullBody = Instantiate(fullBodyPrefab, position, this.transform.rotation);
+        fullBody.GetComponent<Animator>().SetTrigger(triggerName);
+        GameManager.gameOver = true;
+        Destroy(this.gameObject);
     }
 }

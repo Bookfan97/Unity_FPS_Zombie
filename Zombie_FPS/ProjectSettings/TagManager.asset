@@ -10,6 +10,7 @@ TagManager:
   - MedKit
   - Zombie
   - Ragdoll
+  - Safe
   layers:
   - Default
   - TransparentFX
